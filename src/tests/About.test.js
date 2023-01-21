@@ -1,16 +1,31 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-// import userEvent from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 // import { act } from 'react-dom/test-utils';
 import App from '../App';
 import renderWithRouter from './renderWithRouter';
 
-test('o topo da aplicação contém um conjunto fixo de links de navegação', () => {
+test('Teste se a página contém as informações sobre a Pokédex', () => {
   renderWithRouter(<App />);
-  const home = screen.getByRole('link', { name: /home/i });
-  expect(home).toBeInTheDocument();
-  const About = screen.getByRole('link', { name: /About/i });
-  expect(About).toBeInTheDocument();
-  const favorite = screen.getByRole('link', { name: /favorite pokémon/i });
-  expect(favorite).toBeInTheDocument();
+  userEvent.click(screen.getByText(/About/i));
+  const poke = screen.getByText(/this application simulates a pokédex, a digital encyclopedia containing all pokémon/i);
+  expect(poke).toBeInTheDocument();
+});
+test('Teste se a página contém um heading h2 com o texto About Pokédex', () => {
+  renderWithRouter(<App />);
+  userEvent.click(screen.getByText(/About/i));
+  const poke = screen.getByRole('heading', { name: /about pokédex/i });
+  expect(poke).toBeInTheDocument();
+});
+test('Teste se a página contém dois parágrafos com texto sobre a Pokédex', () => {
+  renderWithRouter(<App />);
+  userEvent.click(screen.getByText(/About/i));
+  const pokemon = screen.getByRole('heading', { level: 2 });
+  expect(pokemon).toBeInTheDocument();
+});
+test('Teste se a página contém a seguinte imagem de uma Pokédex', () => {
+  renderWithRouter(<App />);
+  userEvent.click(screen.getByText(/About/i));
+  const imgAlt = screen.getByAltText(/Pokédex/i);
+  expect(imgAlt).toBeInTheDocument();
 });
