@@ -26,6 +26,6 @@ test('Teste se a página contém dois parágrafos com texto sobre a Pokédex', (
 test('Teste se a página contém a seguinte imagem de uma Pokédex', () => {
   renderWithRouter(<App />);
   userEvent.click(screen.getByText(/About/i));
-  const imgAlt = screen.getByAltText(/Pokédex/i);
-  expect(imgAlt).toBeInTheDocument();
+  const image = screen.getByAltText('Pokédex');
+  expect(image.src).toBe('https://cdn2.bulbagarden.net/upload/thumb/8/86/Gen_I_Pok%C3%A9dex.png/800px-Gen_I_Pok%C3%A9dex.png');
 });
