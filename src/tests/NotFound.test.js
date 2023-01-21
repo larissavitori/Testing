@@ -1,10 +1,15 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import renderWithRouter from './renderWithRouter';
-import { FavoritePokemon } from '../pages';
+import NotFound from '../pages/NotFound';
 
-test('Teste se é exibida na tela a mensagem No favorite pokemon found', () => {
-  renderWithRouter(<FavoritePokemon />);
-  const poke = screen.getByText(/No favorite Pokémon found/i);
-  expect(poke).toBeInTheDocument();
+test('Teste se a página contém um heading h2 com o texto Page requested not found', () => {
+  renderWithRouter(<NotFound />);
+  const not = screen.getByText(/Page requested not found/i);
+  expect(not).toBeInTheDocument();
+});
+test('Teste se a página mostra a imagem ', () => {
+  renderWithRouter(<NotFound />);
+  const image = screen.getByAltText('Pikachu crying because the page requested was not found');
+  expect(image.src).toBe('https://media.giphy.com/media/kNSeTs31XBZ3G/giphy.gif');
 });
