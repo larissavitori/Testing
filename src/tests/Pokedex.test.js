@@ -3,11 +3,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from './renderWithRouter';
 import App from '../App';
-import PokemonButtonsPanel from '../components/PokemonButtonsPanel';
-import { Pokemon } from '../components';
-import { Pokedex } from '../pages';
 import pokemonList from '../data';
-// import { Pokedex } from '../pages';
 
 test('Teste se a página contém um heading h2 com o texto Encountered Pokémon', () => {
   renderWithRouter(<App />);
@@ -30,16 +26,13 @@ test('Os próximos Pokémon da lista devem ser mostrados, um a um, ao clicar suc
 
   const Name = screen.getByTestId('pokemon-name');
   expect(Name.innerHTML).toBe('Charmander');
-
-  const tipo = screen.getByTestId('pokemon-type');
-  expect(tipo.innerHTML).toBe('Fire');
-
   container.querySelector('#root > div > div > div:nth-child(2) > div');
-  const p = screen.getByTestId('pokemon-type');
-  expect(p).toBeInTheDocument();
 });
 test('Deve existir um botão de filtragem para cada tipo de Pokémon, sem repetição', () => {
   const { container } = renderWithRouter(<App />);
+
+  const fil = screen.getAllByTestId('pokemon-type-button');
+  expect(fil).toHaveLength(7);
   userEvent.click(screen.getByRole('link', { name: /home/i }));
   container.querySelector('#root > div > div > div:nth-child(3)');
   userEvent.click(screen.getByRole('button', { name: /Electric/i }));
@@ -52,11 +45,26 @@ test('Deve existir um botão de filtragem para cada tipo de Pokémon, sem repeti
 });
 test('Teste se a Pokédex contém um botão para resetar o filtro', () => {
   renderWithRouter(<App pokemonList={ pokemonList } />);
-  const all = screen.getByRole('button', { name: /all/i });
-  expect(all).toBeInTheDocument();
   userEvent.click(screen.getByRole('button', { name: /all/i }));
-  const Name = screen.getByTestId('pokemon-weight');
+
+  const Name = screen.getByTestId('pokemon-type');
   userEvent.click(screen.getByRole('button', { name: /próximo pokémon/i }));
-  expect(Name.innerHTML).toBe('Average weight: 8.5 kg');
+  expect(Name.innerHTML).toBe('Fire');
+
   userEvent.click(screen.getByRole('button', { name: /próximo pokémon/i }));
+});
+test('Teste se a Pokédex contém um botão para resetar o filtro', () => {
+  renderWithRouter(<App pokemonList={ pokemonList } />);
+  userEvent.click(screen.getByRole('button', { name: /fire/i }));
+  const Fire = screen.getByTestId('pokemon-type');
+  expect(Fire.innerHTML).toBe('Fire');
+});
+test('all', () => {
+  renderWithRouter(<App />);
+  const all = screen.getByRole('button', { name: /All/i });
+  expect(all).toBeInTheDocument();
+  userEvent.click(screen.getByRole('button', { name: /próximo pokémon/i }));
+  userEvent.click(all);
+  const pok = screen.getByText(/pikachu/i);
+  expect(pok).toBeInTheDocument();
 });
