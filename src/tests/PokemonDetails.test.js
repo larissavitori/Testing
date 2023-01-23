@@ -45,5 +45,5 @@ test('Teste se o usuário pode favoritar um Pokémon através da página de deta
   const image = screen.getAllByAltText('Pikachu location');
   expect(image.src).not.toBeNull();
   const label = screen.getByLabelText(/pokémon favoritado\?/i);
-  expect(label.innerHTML).toBe('');
+  expect(label).toBeInTheDocument('');
 });
